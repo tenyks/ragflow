@@ -213,8 +213,8 @@ def create():
     req = request.json
     md5 = hashlib.md5()
     md5.update((req["content_with_weight"] + req["doc_id"]).encode("utf-8"))
-    chunck_id = md5.hexdigest()
-    d = {"id": chunck_id, "content_ltks": rag_tokenizer.tokenize(req["content_with_weight"]),
+    chunk_id = md5.hexdigest()
+    d = {"id": chunk_id, "content_ltks": rag_tokenizer.tokenize(req["content_with_weight"]),
          "content_with_weight": req["content_with_weight"]}
     d["content_sm_ltks"] = rag_tokenizer.fine_grained_tokenize(d["content_ltks"])
     d["important_kwd"] = req.get("important_kwd", [])
@@ -244,7 +244,7 @@ def create():
 
         DocumentService.increment_chunk_num(
             doc.id, doc.kb_id, c, 1, 0)
-        return get_json_result(data={"chunk_id": chunck_id})
+        return get_json_result(data={"chunk_id": chunk_id})
     except Exception as e:
         return server_error_response(e)
 
